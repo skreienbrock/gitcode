@@ -1,0 +1,67 @@
+#!/bin/bash
+#
+# empty array
+wallpapers=()
+counter=0
+
+function printDebug() {
+	string=$1
+	wht='\033[1;37m'
+	blu='\033[1;34m'
+	bgr='\033[1;32m'
+	grn='\033[0;32m'
+	red='\033[1;31m'
+	std='\033[0m'
+	if [ "$2" == "b" ]; then
+		echo -e "${blu}[DEBUG] ${grn}${string}$std"
+	else
+		echo -e "${red}[DEBUG] ${wht}${string}$std"
+	fi
+}
+
+function randNum() {
+	max=$1
+	val=$(shuf -i 0-$max|head -n1)
+	# printDebug "Number is $val"
+	echo $val
+}
+
+# Wallpapers
+# change whitespace with %20
+wpath1="/usr/share/backgrounds"
+wpath2="/usr/share/backgrounds/microsoft"
+printDebug "running on folder: $wpath1"
+for i in $(ls -d ${wpath1}/*|sed "s/ /%20/g")
+do 
+	if [ $(echo $i|grep "[a-z]"|grep "jpg\|png"|wc -l) -eq 1 ]; then
+		wallpapers[$counter]="file://$i"
+		let counter=$counter+1
+		#echo file://$i 
+	fi
+done
+
+# gsettings
+
+wallpaper=$(gsettings get org.gnome.desktop.background 'picture-uri')
+default='file:///usr/share/backgrounds/Carmine%20De%20Fazio.jpg'
+#printDebug "wallpaper is $wallpaper" 'b'
+#printDebug "counter is $counter" 'b'
+#printDebug "randNum 1 is $(randNum $counter)" 'b'
+#printDebug "randNum 2 is $(randNum $counter)" 'b'
+#printDebug "12th element is ${wallpapers[11]}"
+
+# default:
+# gsettings set org.gnome.desktop.background 'picture-uri' 'file:///usr/share/backgrounds/Carmine%20De%20Fazio.jpg'
+
+while :
+do
+	# change all 60 seconds
+	sleep 300
+	number=$(randNum $counter)
+	pic=${wallpapers[$number]}
+	gsettings set org.gnome.desktop.background 'picture-uri' $pic
+	printDebug "wallpaper is now $pic (id $number)"
+done
+
+# exit
+exit 0
