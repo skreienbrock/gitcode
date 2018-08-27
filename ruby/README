@@ -1,0 +1,25 @@
+Dynamic Object Oriented Language
+with Rails: best Web Language
+
+ruby-lang.org
+
+- not compiled (interpreted language)
+- no semicolons
+- whitespace independend
+
+- single command on bash possible
+
+ruby vs ruby on rails
+ruby on rails is a web framework written in ruby
+ruby is not only for the web
+
+Lynda: Ruby essential training
+
+ruby interpreter (irb)
+svekre@tesla:~$ irb
+irb(main):001:0> puts 1 + 1
+2 # solution
+=> nil # return value!
+
+or: 
+irb --simple-prompt
