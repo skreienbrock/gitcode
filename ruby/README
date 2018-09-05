@@ -16,7 +16,7 @@ ruby is not only for the web
 Lynda: Ruby essential training
 
 ruby interpreter (irb)
-svekre@tesla:~$ irb
+user@computer:~$ irb
 irb(main):001:0> puts 1 + 1
 2 # solution
 => nil # return value!
