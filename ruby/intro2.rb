@@ -13,3 +13,8 @@ printf "\n"
 
 1.upto(3) { |i| puts GRN + "Test " + i.to_s + NOC }
 
+fruits=["apple","banana","pear"]
+hash1_dictionary={:name => "Sven", :id => 1}
+
+fruits.each { |element| puts element.capitalize }
+
