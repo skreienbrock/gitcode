@@ -11,6 +11,31 @@ class PrintX
     puts "["  + @@CLRS[symbol] + "-" + @@CLRS[:default] + "] " + @@CLRS[:white] + string + @@CLRS[:default]
  end
 
+ def warnbox(string)
+    puts "["  + @@CLRS[:red] + ">" + @@CLRS[:default] + "] " + @@CLRS[:red] + string + @@CLRS[:default]
+ end
+
+ def debugme
+	self.warnbox("Running DEBUG method ...")
+	self.wrbox("Another one bites the dust",:red)
+	self.wrbox("Another one bites the dust",:green)
+	self.wrbox("Another one bites the dust",:blue)
+	self.wrbox("Another one bites the dust",:yellow)
+	self.readfile("/etc/os-release") 
+	#print "Give me a color (1-7):> "
+	#x=gets
+	#print "Give me your font type (1-7):> "
+	#y=gets
+	# y:
+	# 0 = no change in style
+	# 1 = bold
+	# 2 = darker
+	# 3 = italic
+	# 4 = underline
+	# 5 = blink
+	#puts "\033[" + y.chomp + ";3" + x.chomp + "m" + "Your string color of choice" + "\033[0m"
+ end
+
  def readfile(file)
     fh = File.new(file,'r')
     while line = fh.gets
@@ -20,21 +45,5 @@ class PrintX
 end
 
 printx=PrintX.new
-printx.wrbox("Another one bites the dust",:red)
-printx.wrbox("Another one bites the dust",:green)
-printx.wrbox("Another one bites the dust",:blue)
-printx.wrbox("Another one bites the dust",:yellow)
-printx.readfile("/etc/os-release")
-
-print "Give me a color (1-7):> "
-x=gets
-print "Give me your font type (1-7):> "
-y=gets
-# y:
-# 0 = no change in style
-# 1 = bold
-# 2 = darker
-# 3 = italic
-# 4 = underline
-# 5 = blink
-puts "\033[" + y.chomp + ";3" + x.chomp + "m" + "Your string color of choice" + "\033[0m"
+# printx.debugme
+printx.readfile("/etc/hosts")
