@@ -42,7 +42,8 @@ endset=set(endings)
 # generate directory with occurences > 50 files
 suffixOccurence={}
 for suffix in endset:
-    if endings.count(suffix) >= 1:
+    # how many suffixes do you like to count (your 2 pdfs?)
+    if endings.count(suffix) >= 10:
         suffixOccurence[suffix]=endings.count(suffix)
 
 print("In %d files, %d files had suffixes.\nThe following suffixes occured:\n" % (fCnt,len(endings)))

@@ -1,0 +1,100 @@
+\documentclass[]{scrartcl}
+
+%opening
+\title{using docker:\\a docker cheat sheet}
+\author{Sven Kreienbrock}
+%packages
+\usepackage{tcolorbox}
+
+\begin{document}
+
+% new boxes
+\newtcolorbox{mybox}
+{
+    colback=black!5!white,
+	fonttitle=\fontfamily{courier},
+	colframe=black!50!white,
+}
+\maketitle
+
+\begin{abstract}
+% some info
+\end{abstract}
+
+\section{Getting Information}
+
+\begin{mybox}
+	\begin{itemize}
+		\item Collect information about docker itself (\textit{the docker daemon \textsf{dockerd}})
+		\subitem \texttt{\$ docker info} 
+		\subitem \texttt{\$ docker version}
+		\item How much storage does docker use on your local hard disk?
+		\subitem  \texttt{\$ docker system df}
+		\item Deleting all stopped containers, all networks, the build cache and reclaim system space
+		\subitem \texttt{\$ docker system prune}
+		\item Getting infos about downloaded images
+		\subitem \texttt{\$ docker images}
+		\item Manage active [or inactive] Containers
+		\subitem \texttt{\$ docker ps [-a]}
+		\item Check on Ressources (Container Usage)
+		\subitem \texttt{\$ docker stats}
+		\item Searching for docker images (CLI based)
+		\subitem \texttt{\$ docker search keras} or \texttt{\$ docker search tensorflow} e.g.
+		\subitem \(\rightarrow\) It is necessary to check Docker-Hub for Usage (Invocation)
+		\subitem \(\rightarrow\) \texttt{https://hub.docker.com}
+	\end{itemize}
+\end{mybox}
+
+\section{executing/running docker images}
+\begin{mybox}
+	Some basics you should consider when executing images: \\
+	The first step always: \texttt{docker run [OPTIONS]}, where OPTIONS could be one or more of:
+	\begin{itemize}
+		\item \texttt{-v; --volume list} adding Support for a Volume 
+		\subitem e.g.: \texttt{-v /path/at/host:/path/in/container}
+		\item \texttt{-p; --publish list} publishing of container internal ports
+		\subitem e.g.: \texttt{-p 8888:8888} (mapping host-Port 8888 to container Port 8888)
+		\item \texttt{-i} interactive (mostly in combination with \texttt{-t} for tty)
+		\item \texttt{-t} tty (mostly in combination with \texttt{-i} for interactive tty)
+		\item \texttt{--rm} removes container after usage
+		\item \texttt{-e} setting of environment variables
+		\subitem e.g.: \texttt{-e DISPLAY=\$DISPLAY}  
+		\subitem sets Variable DISPLAY to systems \$DISPLAY. 
+	\end{itemize}
+\end{mybox}
+
+\section{Examples}
+\noindent
+Example: run the BPH Matlab Image, with X11 forwarding
+\begin{mybox}
+	\texttt{\$ xhost +; docker run -it \\
+		-v /tmp/.X11-unix:/tmp/.X11-unix \\
+		-v /bph/home/user:/data \\
+		-e DISPLAY=\$DISPLAY \\
+		svekre/ml:latest matlab; xhost -}
+\end{mybox}
+\\
+\noindent
+Example: R-Studio (login with rstudio and \texttt{MYPASSWORDX})
+\begin{mybox}
+	\begin{itemize}
+		\item 	\texttt{\$ docker run -d -p 8787:8787 \\
+			-e PASSWORD=MYPASSWORDX \\
+			--name rstudio rocker/rstudio}
+	    \subitem \(\rightarrow\) Afterwards type into your browser address bar: 
+	    \subitem  \(\rightarrow\) \texttt{http://localhost:8787} and provide your login credentials.
+	\end{itemize}
+\end{mybox}
+
+\section{stop and delete images/containers}
+\begin{mybox}
+	Example: container named cringy\_conti as Instance of Image rocker/rstudio
+	\begin{itemize}
+		\item \texttt{\$ docker rm cringy\_conti} 
+		\subitem deletes container
+		\item \texttt{\$ docker rmi rocker/rstudio}
+		\subitem removes image from Host
+	\end{itemize}
+\end{mybox}
+
+\end{document}
