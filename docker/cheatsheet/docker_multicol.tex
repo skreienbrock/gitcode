@@ -1,0 +1,175 @@
+\documentclass[landscape]{article}
+%% paper dimensions increased approximately two-fold of printable area
+%usepackage[margin=0.125in,paperwidth=16.25in,paperheight=21.25in]{geometry}
+\usepackage{amsmath,subfigure,color,verbatim}
+\usepackage{multicol}
+\usepackage{savetrees}
+\usepackage{lipsum}
+\usepackage{titlesec}
+% colored boxes
+\usepackage{tcolorbox}
+% keystrokes
+\usepackage{keystroke}
+% code listings
+\usepackage{listingsutf8}
+
+\titleformat*{\section}{\LARGE\bfseries}
+
+\pagestyle{empty}
+\begin{document}
+\begin{multicols*}{3}
+% simple docker commands
+\section*{simple docker commands}
+\begin{itemize}
+	\item \texttt{docker info}
+	\subitem \textsf{docker related system information}
+	\item \texttt{docker version}
+	\subitem \textsf{show installed version}
+	\item \texttt{docker images}
+	\subitem \textsf{show downloaded images}
+	\item \texttt{docker search <pattern>}
+	\subitem \textsf{search Hub for \textit{pattern} matching image}
+\end{itemize}
+
+% second section
+\section*{docker options}
+\begin{itemize}
+	\item \texttt{docker run [OPTIONS]}
+	\subitem \textsf{run docker image}
+\end{itemize}
+\paragraph*{with:} \texttt{[OPTIONS]} matching
+\begin{description}
+	\item \texttt{-v, --volume \textit{vh:vc}}
+	\subitem \textsf{connect volume to container}
+	\item \texttt{-p, --port \textit{ph:pc}}
+	\subitem \textsf{forward ports to host machine}
+	\item \texttt{-e, --env \textit{list}}
+	\subitem \textsf{set container environment}
+	\item \texttt{-d, --detach}
+	\subitem \textsf{run container in background}
+	\item \texttt{-i, --interactive}
+	\subitem \textsf{interactive STDIN, (mostly used with \texttt{-t})}
+	\item \texttt{-t, --tty}
+	\subitem \textsf{run tty, (mostly used with \texttt{-i})}
+	\item \texttt{-u, --user \textit{user}}
+	\subitem \textsf{connect with user}
+	\item \texttt{-w, --workdir \texttt{string}}
+	\subitem \textsf{start container with workdir}
+\end{description}
+
+\vspace{0.5cm}
+%
+%
+\tcbset
+{colframe=white!75!black,
+	fonttitle=\bfseries,
+	colback=white!5!white
+}
+%
+%
+
+\begin{tcolorbox}[title=Examples]
+	\textbf{https://www.rocker-project.org/}\\
+	\textbf{start R without Rstudio:}\\
+	\texttt{\~\$ docker run -it --rm\\
+		-v /bph/puredata1/work/folder:/data
+		rocker/r-base }\\
+	\textbf{start R with Rstudio:}\\
+	\texttt{\~\$ docker run --rm -p 8787:8787\\
+	-v /bph/puredata1/work/folder:/data
+	-e PASSWORD=password rocker/rstudio}
+\end{tcolorbox}
+
+
+% second section
+\section*{manage images \& container}
+\begin{itemize}
+	\item \texttt{docker stats}
+	\subitem \textsf{container statistics (cpu/mem etc.)}
+	\item \texttt{docker top <container>}
+	\subitem \textsf{display running processes of a container}
+	\item \texttt{docker ps}
+	\subitem \textsf{show all active containers}
+	\item \texttt{docker ps -a}
+	\subitem \textsf{show additional inactive containers}
+	\item \texttt{docker commit <container>}
+	\subitem \textsf{save container / create an image}
+	\item \texttt{docker rename <name/ID> <new\_name>}
+	\subitem \textsf{rename image}
+	\item \texttt{docker history <image>}
+	\subitem \textsf{Command/Dockerfile History des Images}
+	\item \texttt{docker stop <container>}
+	\subitem \textsf{stop container}
+	\item \texttt{docker rm <container>}
+	\subitem \textsf{active deletion of a container}
+	\item \texttt{docker rmi <image>}
+	\subitem \textsf{active deletion of an image}
+	\item \Ctrl \keystroke{P} \textsf{followed by} \Ctrl \keystroke{Q}
+	\subitem \textsf{detach from active terminal}
+	\item \texttt{docker exec <container> command}
+	\subitem \textsf{send \texttt{command} into container}
+	\item \texttt{docker attach <container>}
+	\subitem \textsf{attach to containers terminal}
+\end{itemize}
+
+\vspace{1.75cm}
+\begin{tcolorbox}[title=Forwarding GUI elements]
+	\textsf{Windows:}
+	\begin{itemize}
+		\item \textsf{Prerequisite: Installation of VcxSrv}	
+	\end{itemize}
+	\texttt{PS: set -name DISPLAY -value <IP>:0.0}
+	
+	\texttt{-e DISPLAY=\$DISPLAY}\\
+	
+	\textsf{Linux:}
+	\begin{itemize}
+		\item \textsf{Forward socket and Display to host}	
+	\end{itemize}
+	\texttt{-e DISPLAY=\$DISPLAY}\\
+	\texttt{-v /tmp/.X11-unix:/tmp/.X11-unix}
+\end{tcolorbox}
+
+\section*{system commands}
+\begin{itemize}
+	\item \texttt{docker system df}
+	\subitem \textsf{show used storage by docker}
+	\item \texttt{docker system prune}
+	\subitem \textsf{delete all stopped docker containers, networks etc.}
+\end{itemize}
+
+\vspace{0.5cm}
+% DockerFiles
+\section*{Dockerfiles}
+\textsf{Example Listing:}
+\begin{lstlisting}
+	FROM ubuntu:18.04
+	COPY . /app
+	RUN make /app
+	CMD python /app/app.py
+\end{lstlisting}
+\begin{itemize}
+	\item \texttt{FROM}
+	\subitem \textsf{create Layer from Image (e.g. Ubuntu:18.04)}
+	\item \texttt{COPY}
+	\subitem \textsf{copy data from current directory}
+	\item \texttt{RUN}
+	\subitem \textsf{builds your app with \texttt{make}}
+	\item \texttt{CMD}
+	\subitem \textsf{specifies what command to run within the container}
+\end{itemize}
+\vspace{0.2cm}
+\section*{docker build}
+\begin{itemize}
+	\item \texttt{docker build -t <imagename> - < Dockerfile}
+	\subitem \textsf{build image from \textit{Dockerfile}}
+\end{itemize}
+
+\vspace{1.5cm}
+\begin{tcolorbox}[title=Cheatsheet]
+	\textbf{2018}
+	\textsf{sven.kreienbrock@bph.ruhr-uni-bochum.de}
+\end{tcolorbox}
+
+\end{multicols*}
+\end{document}
